@@ -62,8 +62,6 @@ def rewrite_query(query: str, history: list) -> str:
         return query
 
 
-# engine.py
-
 def get_final_answer(query: str, history: list) -> dict:
     """
     接收问题和历史，执行 RAG 流程，返回包含纯净答案和来源的字典。
