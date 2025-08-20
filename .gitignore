@@ -3,6 +3,9 @@
 # 忽略环境变量文件
 .env
 
+忽略日志文件
+app.log
+
 # 忽略Python缓存文件
 __pycache__/
 *.pyc
@@ -15,5 +18,3 @@ __pycache__/
 *.index
 *.json
 
-# 忽略日志文件
-*.log
