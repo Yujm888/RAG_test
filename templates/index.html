@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>金融监管问答系统 </title>
+    <style>
+        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+        .sidebar { width: 20%; background-color: #f4f4f4; padding: 1em; border-right: 1px solid #ddd;}
+        .chat-container { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; }
+        .messages { flex-grow: 1; overflow-y: auto; padding: 1em; }
+        .message { margin-bottom: 1em; }
+        .message.user { text-align: right; }
+        .message.assistant .content { background-color: #e6f7ff; display: inline-block; padding: 0.5em 1em; border-radius: 10px; max-width: 80%; text-align: left;}
+        .message.user .content { background-color: #d9f7be; display: inline-block; padding: 0.5em 1em; border-radius: 10px; max-width: 80%; text-align: left;}
+        .message.assistant table {
+            border-collapse: collapse; /* 合并边框 */
+            width: 100%;             /* 表格宽度 */
+            margin-top: 1em;         /* 和上方内容留出间距 */
+            margin-bottom: 1em;      /* 和下方内容留出间距 */
+            box-shadow: 0 0 5px rgba(0,0,0,0.1); /* 加一点阴影，更有质感 */
+        }
+        .message.assistant th, .message.assistant td {
+            border: 1px solid #ddd;  /* 单元格边框 */
+            padding: 8px;            /* 单元格内边距 */
+            text-align: left;        /* 文字左对齐 */
+        }
+        .message.assistant th {
+            background-color: #f2f2f2; /* 表头背景色 */
+            font-weight: bold;         /* 表头文字加粗 */
+        }
+        .message.assistant tr:nth-child(even) {
+            background-color: #f9f9f9; /* 奇偶行不同背景色，方便阅读 */
+        }
+        .input-form { padding: 1em; border-top: 1px solid #ddd; background-color: #fff; }
+        .input-form form { display: flex; }
+        input[type="text"] { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;}
+        button { padding: 10px 15px; border: none; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; margin-left: 10px;}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>控制面板</h2>
+        <a href="/clear"><button style="width:100%;">开始新对话</button></a>
+    </div>
+    <div class="chat-container">
+        <div class="messages">
+            <div class="message assistant">
+                <div class="content">我是一个智能问答小助手，有什么可以帮您的吗？</div>
+                    </div>
+                        {% for message in history %}
+                            {% if message.role != 'system' %}
+                                <div class="message {{ message.role }}">
+                                    <div class="content">
+                                        {% if message.role == 'assistant' %}
+                                            {{ message.content | safe }}  {% else %}
+                                            {{ message.content }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+        <div class="input-form">
+            <form action="/ask" method="post">
+                <textarea name="history" style="display:none;">{{ history|tojson }}</textarea>
+                <input type="text" name="query" placeholder="请输入你的问题..." required autofocus>
+                <button type="submit">发送</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

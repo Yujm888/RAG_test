@@ -1,0 +1,16 @@
+# .gitignore
+
+# 忽略环境变量文件
+.env
+
+# 忽略Python缓存文件
+__pycache__/
+*.pyc
+
+# 忽略IDE配置文件
+.idea/
+.vscode/
+
+# 忽略知识库生成文件
+*.index
+*.json
