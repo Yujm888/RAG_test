@@ -6,7 +6,6 @@ import config  # 导入我们的全局配置
 # 从配置中获取日志记录器
 logger = config.logger
 
-#1. 初始化 OpenAI 客户端
 try:
     client = OpenAI(
         api_key=config.API_KEY,
