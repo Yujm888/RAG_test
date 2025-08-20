@@ -1,0 +1,56 @@
+2025-08-20 16:40:31 - INFO - [config.py:71] - 配置加载成功，日志系统已初始化。
+2025-08-20 16:40:37 - INFO - [embedding_utils.py:15] - OpenAI 客户端初始化成功。
+2025-08-20 16:40:37 - INFO - [loader.py:125] - Loading faiss with AVX2 support.
+2025-08-20 16:40:37 - INFO - [loader.py:127] - Successfully loaded faiss with AVX2 support.
+2025-08-20 16:40:37 - INFO - [__init__.py:186] - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-08-20 16:40:37 - INFO - [ingest.py:29] - --- 开始处理文件: knowledge_base/source_documents\test_document.docx ---
+2025-08-20 16:40:37 - INFO - [parsers.py:39] - 正在使用 unstructured 进行解析: knowledge_base/source_documents\test_document.docx
+2025-08-20 16:40:38 - INFO - [parsers.py:46] - 正在进行元素分组
+2025-08-20 16:40:38 - INFO - [parsers.py:63] - 处理了一个的表格。
+2025-08-20 16:40:38 - INFO - [parsers.py:81] - 文本分组完成，共得到 4 个语义块。
+2025-08-20 16:40:38 - INFO - [parsers.py:104] - --- 文件解析和分块完成，共生成 4 个最终知识块 ---
+2025-08-20 16:40:38 - INFO - [ingest.py:41] - 文件 test_document.docx 处理完成，获得 4 个知识块。
+2025-08-20 16:40:38 - INFO - [ingest.py:29] - --- 开始处理文件: knowledge_base/source_documents\test_document2.docx ---
+2025-08-20 16:40:38 - INFO - [parsers.py:39] - 正在使用 unstructured 进行解析: knowledge_base/source_documents\test_document2.docx
+2025-08-20 16:40:38 - INFO - [parsers.py:46] - 正在进行元素分组
+2025-08-20 16:40:38 - INFO - [parsers.py:63] - 处理了一个的表格。
+2025-08-20 16:40:38 - INFO - [parsers.py:81] - 文本分组完成，共得到 6 个语义块。
+2025-08-20 16:40:38 - INFO - [parsers.py:104] - --- 文件解析和分块完成，共生成 6 个最终知识块 ---
+2025-08-20 16:40:38 - INFO - [ingest.py:41] - 文件 test_document2.docx 处理完成，获得 6 个知识块。
+2025-08-20 16:40:38 - INFO - [ingest.py:29] - --- 开始处理文件: knowledge_base/source_documents\test_document3.docx ---
+2025-08-20 16:40:38 - INFO - [parsers.py:39] - 正在使用 unstructured 进行解析: knowledge_base/source_documents\test_document3.docx
+2025-08-20 16:40:38 - INFO - [parsers.py:46] - 正在进行元素分组
+2025-08-20 16:40:38 - INFO - [parsers.py:63] - 处理了一个的表格。
+2025-08-20 16:40:38 - INFO - [parsers.py:81] - 文本分组完成，共得到 6 个语义块。
+2025-08-20 16:40:38 - INFO - [parsers.py:104] - --- 文件解析和分块完成，共生成 6 个最终知识块 ---
+2025-08-20 16:40:38 - INFO - [ingest.py:41] - 文件 test_document3.docx 处理完成，获得 6 个知识块。
+2025-08-20 16:40:38 - INFO - [ingest.py:47] - 所有文件处理完毕，共计 16 个知识块。开始进行向量化...
+2025-08-20 16:40:38 - INFO - [vectorizer.py:10] - 开始批量向量化所有文本块...
+2025-08-20 16:40:40 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:41 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:42 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:42 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:43 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:44 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:45 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:46 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:47 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:47 - INFO - [vectorizer.py:16] - 正在处理第 10/16 个文本块...
+2025-08-20 16:40:48 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:49 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:50 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:51 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:52 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:53 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:54 - INFO - [_client.py:1025] - HTTP Request: POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings "HTTP/1.1 200 OK"
+2025-08-20 16:40:54 - INFO - [vectorizer.py:25] - 批量向量化完成，共16个向量，耗时 15.97 秒。
+2025-08-20 16:40:54 - INFO - [kb_builder.py:15] - 正在构建并保存 FAISS 索引和文本块
+2025-08-20 16:40:54 - INFO - [kb_builder.py:18] - 正在向索引中添加 16 个向量...
+2025-08-20 16:40:54 - INFO - [kb_builder.py:20] - 所有向量已成功添加到索引！
+2025-08-20 16:40:54 - INFO - [kb_builder.py:21] - 正在将索引保存到: knowledge_base/generated\knowledge.index
+2025-08-20 16:40:54 - INFO - [kb_builder.py:23] - 正在将文本块保存到: knowledge_base/generated\knowledge.json
+2025-08-20 16:40:54 - INFO - [kb_builder.py:26] - 所有成果已成功保存！
+2025-08-20 16:40:54 - INFO - [ingest.py:51] - 
+--- 知识库构建完成！---
+2025-08-20 16:40:54 - INFO - [ingest.py:52] - 索引保存至: knowledge_base/generated\knowledge.index
+2025-08-20 16:40:54 - INFO - [ingest.py:53] - 数据保存至: knowledge_base/generated\knowledge.json
