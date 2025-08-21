@@ -18,3 +18,5 @@ __pycache__/
 *.index
 *.json
 
+# 忽略所有 SQLite 数据库文件
+*.db
