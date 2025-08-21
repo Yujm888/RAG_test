@@ -13,10 +13,10 @@ logger = config.logger
 
 
 class SearchEngine:
-    """封装了 FAISS, BM25 和 Re-ranking 的三阶段搜索引擎。"""
+    """封装了 FAISS, BM25 和 Re-ranking 的搜索引擎。"""
 
     def __init__(self, index_path: str, chunks_path: str):
-        logger.info("--- 正在初始化搜索引擎 (V3版 - 集成Re-ranking) ---")
+        logger.info("--- 正在初始化搜索引擎 ---")
         self.faiss_index = None
         self.chunks_with_metadata = []
         self.plain_chunks = []
