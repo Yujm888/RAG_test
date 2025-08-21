@@ -28,6 +28,7 @@ def clean_history_for_llm(history: list) -> list:
 
 app = Flask(__name__)
 
+
 # --- 在应用启动时，统一创建所有核心服务实例 ---
 try:
     # 1. 创建搜索引擎实例
@@ -71,7 +72,6 @@ def ask():
         logger.warning("无效的历史记录格式，重定向到主页。")
         return redirect(url_for('home'))
 
-    # !!! 核心修改：调用 rag_pipeline 对象的 execute 方法 !!!
     result = rag_pipeline.execute(user_query, history_without_system)
 
     pure_answer = result["answer"]

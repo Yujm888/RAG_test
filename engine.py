@@ -1,7 +1,6 @@
 # engine.py 逻辑编排
 import config
 from core.search_engine import SearchEngine
-from core.embedding_utils import client as openai_client
 import re
 
 logger = config.logger
