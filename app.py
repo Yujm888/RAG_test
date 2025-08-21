@@ -7,6 +7,7 @@ from core.embedding_utils import client as openai_client
 import config
 from markdown_it import MarkdownIt
 import re
+from flask import jsonify
 
 logger = config.logger
 md = MarkdownIt().enable('table')
@@ -100,6 +101,41 @@ def ask():
 def clear_session():
     logger.info("会话已清除。")
     return redirect(url_for('home'))
+
+
+@app.route('/api/rag_query', methods=['POST'])
+def api_rag_query():
+    """
+    这是一个给其他程序调用的 API 接口。
+    它接收 JSON 格式的请求，并返回 JSON 格式的响应。
+    """
+    # 1. 检查请求是否为 JSON 格式
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+
+    # 2. 获取请求中的数据
+    data = request.get_json()
+    user_query = data.get('query')
+    history = data.get('history', [])  # history 是可选的，默认为空列表
+
+    # 3. 检查必要的字段是否存在
+    if not user_query:
+        return jsonify({"error": "Missing 'query' field in request"}), 400
+
+    # 检查 RAG 流程是否已准备好
+    if rag_pipeline is None:
+        return jsonify({"error": "RAG pipeline is not available"}), 500
+
+    logger.info(f"收到 API 请求: query='{user_query}'")
+
+    # 4. 调用您的核心 RAG 逻辑
+    result = rag_pipeline.execute(user_query, history)
+
+    # 5. 将结果封装成 JSON 格式返回
+    return jsonify({
+        "answer": result.get("answer"),
+        "sources": result.get("sources")
+    })
 
 
 if __name__ == '__main__':
