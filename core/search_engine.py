@@ -15,6 +15,7 @@ logger = config.logger
 class SearchEngine:
     """封装了 FAISS, BM25 和 Re-ranking 的搜索引擎。"""
 
+
     # 构造方法
     def __init__(self, index_path: str, chunks_path: str):
         logger.info("--- 正在初始化搜索引擎 ---")
