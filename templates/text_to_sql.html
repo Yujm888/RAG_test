@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库问答 (Text-to-SQL)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>金融监管问答</h1>
+                 <div class="active-engine-display">
+                    🗃️ 数据库问答 (SQL)
+                </div>
+            </div>
+             <div class="sidebar-footer">
+                <a href="/text_to_sql" class="control-button">新对话</a>
+                <a href="/" class="control-button secondary">返回主页</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="chat-history" id="chat-history">
+                <div class="welcome-message">
+                    <h2>数据库问答 (Text-to-SQL)</h2>
+                    <p>请问您想查询什么？例如：“查询所有高风险的金融产品”。</p>
+                </div>
+                {% for message in history %}
+                    <div class="message-wrapper {{ message.role }}">
+                        <div class="avatar">{{ '🧑' if message.role == 'user' else '🤖' }}</div>
+                        <div class="message-content">
+                             {% if message.role == 'assistant' %}
+                                {{ message.content | safe }}
+                            {% else %}
+                                {{ message.content }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="chat-input-area">
+                <form action="/ask_sql" method="post">
+                    <textarea name="history" style="display:none;">{{ history|tojson }}</textarea>
+                     <div class="input-wrapper">
+                        <input type="text" name="query" placeholder="向数据库问答助手提问..." required autofocus autocomplete="off">
+                        <button type="submit">发送</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -2,70 +2,86 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>金融监管问答系统 </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金融监管问答系统 - 选择模式</title>
     <style>
-        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
-        .sidebar { width: 20%; background-color: #f4f4f4; padding: 1em; border-right: 1px solid #ddd;}
-        .chat-container { flex-grow: 1; display: flex; flex-direction: column; height: 100vh; }
-        .messages { flex-grow: 1; overflow-y: auto; padding: 1em; }
-        .message { margin-bottom: 1em; }
-        .message.user { text-align: right; }
-        .message.assistant .content { background-color: #e6f7ff; display: inline-block; padding: 0.5em 1em; border-radius: 10px; max-width: 80%; text-align: left;}
-        .message.user .content { background-color: #d9f7be; display: inline-block; padding: 0.5em 1em; border-radius: 10px; max-width: 80%; text-align: left;}
-        .message.assistant table {
-            border-collapse: collapse; /* 合并边框 */
-            width: 100%;             /* 表格宽度 */
-            margin-top: 1em;         /* 和上方内容留出间距 */
-            margin-bottom: 1em;      /* 和下方内容留出间距 */
-            box-shadow: 0 0 5px rgba(0,0,0,0.1); /* 加一点阴影，更有质感 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
         }
-        .message.assistant th, .message.assistant td {
-            border: 1px solid #ddd;  /* 单元格边框 */
-            padding: 8px;            /* 单元格内边距 */
-            text-align: left;        /* 文字左对齐 */
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
         }
-        .message.assistant th {
-            background-color: #f2f2f2; /* 表头背景色 */
-            font-weight: bold;         /* 表头文字加粗 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .message.assistant tr:nth-child(even) {
-            background-color: #f9f9f9; /* 奇偶行不同背景色，方便阅读 */
+        h1 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
-        .input-form { padding: 1em; border-top: 1px solid #ddd; background-color: #fff; }
-        .input-form form { display: flex; }
-        input[type="text"] { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;}
-        button { padding: 10px 15px; border: none; background-color: #007bff; color: white; border-radius: 5px; cursor: pointer; margin-left: 10px;}
+        p {
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .button-container {
+            display: flex;
+            gap: 30px;
+        }
+        .button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 150px;
+            padding: 20px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .button .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .rag-button { background: #007bff; }
+        .sql-button { background: #28a745; }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>控制面板</h2>
-        <a href="/clear"><button style="width:100%;">开始新对话</button></a>
-    </div>
-    <div class="chat-container">
-        <div class="messages">
-            <div class="message assistant">
-                <div class="content">我是一个智能问答小助手，有什么可以帮您的吗？</div>
-                    </div>
-                        {% for message in history %}
-                            {% if message.role != 'system' %}
-                                <div class="message {{ message.role }}">
-                                    <div class="content">
-                                        {% if message.role == 'assistant' %}
-                                            {{ message.content | safe }}  {% else %}
-                                            {{ message.content }}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-        <div class="input-form">
-            <form action="/ask" method="post">
-                <textarea name="history" style="display:none;">{{ history|tojson }}</textarea>
-                <input type="text" name="query" placeholder="请输入你的问题..." required autofocus>
-                <button type="submit">发送</button>
-            </form>
+    <div class="container">
+        <h1>金融监管问答系统</h1>
+        <p>请选择一个引擎开始您的提问</p>
+        <div class="button-container">
+            <a href="/rag" class="button rag-button">
+                <div class="icon">📄</div>
+                <span>文档问答 (RAG)</span>
+            </a>
+            <a href="/text_to_sql" class="button sql-button">
+                <div class="icon">🗃️</div>
+                <span>数据库问答 (SQL)</span>
+            </a>
         </div>
     </div>
 </body>
