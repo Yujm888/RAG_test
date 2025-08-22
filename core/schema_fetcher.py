@@ -1,4 +1,4 @@
-#core/schema_fetcher.py
+# yujm888/rag_test/RAG_test-e24255c5e1374fa6b1b3218f66279298001f055a/core/schema_fetcher.py
 
 import os
 import oracledb
@@ -55,11 +55,24 @@ class OracleSchemaFetcher(BaseSchemaFetcher):
     """
 
     def __init__(self):
+        # --- 核心修正：使用新的、精确的配置变量 ---
         self.user = config.ORACLE_USER
         self.password = config.ORACLE_PASSWORD
-        self.dsn = config.ORACLE_DSN
-        if not all([self.user, self.password, self.dsn]):
+        self.host = config.ORACLE_HOST
+        self.port = config.ORACLE_PORT
+        self.service_name = config.ORACLE_SERVICE_NAME
+        self.sid = config.ORACLE_SID
+
+        # 检查配置完整性
+        if not all([self.user, self.password, self.host, self.port]) or not (self.service_name or self.sid):
             raise ValueError("Oracle 连接配置不完整，请检查 .env 文件。")
+
+        # 构造 DSN 字符串，供 _fetch_from_db 方法使用
+        if self.service_name:
+            self.dsn = oracledb.makedsn(self.host, self.port, service_name=self.service_name)
+        else:
+            self.dsn = oracledb.makedsn(self.host, self.port, sid=self.sid)
+
         config.logger.info(f"【模式】: 已启用 Oracle Schema 提取器 (用户: {self.user})。")
 
     def _fetch_from_db(self) -> str:
@@ -89,6 +102,7 @@ class OracleSchemaFetcher(BaseSchemaFetcher):
 
         schema_parts = []
         try:
+            # 此处将使用在 __init__ 中构造好的 self.dsn
             with oracledb.connect(user=self.user, password=self.password, dsn=self.dsn) as connection:
                 cursor = connection.cursor()
                 cursor.execute(query, owner=self.user.upper())
@@ -130,16 +144,3 @@ class OracleSchemaFetcher(BaseSchemaFetcher):
             return f"-- 错误：提取 Oracle Schema 时发生未知错误: {e}"
 
         return "\n\n".join(schema_parts)
-
-
-if __name__ == '__main__':
-    print("--- 缓存功能测试 (Oracle & DDL 格式) ---")
-    BaseSchemaFetcher.clear_cache()
-    try:
-        fetcher = OracleSchemaFetcher()
-        schema = fetcher.get_schema_with_comments()
-        print("\n--- 从 Oracle 提取 Schema 成功 ---")
-        print(schema)
-    except ValueError as e:
-        print(f"\n错误：{e}")
-        print("请确保你的 .env 文件中已正确配置 Oracle 连接信息。")

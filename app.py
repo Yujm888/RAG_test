@@ -99,12 +99,18 @@ def ask():
     # --- 更新来源信息展示逻辑 ---
     sources_html = ""
     if sources_data and isinstance(sources_data, list) and len(sources_data) > 0:
+        # 检查第一个来源项的类型来决定如何格式化
         source_item = sources_data[0]
-        if isinstance(source_item, dict) and source_item.get("type") == "database":
-            sql_query = source_item.get("query", "无SQL信息")
-            sources_html = f"<p><strong>数据库查询:</strong></p><pre><code>{sql_query}</code></pre>"
-        else:
-            # 保持原来的 RAG 来源展示逻辑
+
+        if isinstance(source_item, dict):
+            source_type = source_item.get("type")
+            if source_type == "database":
+                sql_query = source_item.get("query", "无SQL信息")
+                sources_html = f"<p><strong>数据库查询:</strong></p><pre><code>{sql_query}</code></pre>"
+            elif source_type == "schema_info":
+                sources_html = ""
+
+        elif isinstance(source_item, list):
             sources_list_items = [f"<li>《{doc}》(章节: {chap})</li>" for doc, chap in sources_data if
                                   isinstance(doc, str) and isinstance(chap, str)]
             if sources_list_items:

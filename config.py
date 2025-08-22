@@ -21,7 +21,10 @@ BASE_URL = os.getenv("BASE_URL")
 # --- Oracle DB 配置 ---
 ORACLE_USER = os.getenv("ORACLE_USER")
 ORACLE_PASSWORD = os.getenv("ORACLE_PASSWORD")
-ORACLE_DSN = os.getenv("ORACLE_DSN")
+ORACLE_HOST = os.getenv("ORACLE_HOST")
+ORACLE_PORT = os.getenv("ORACLE_PORT")
+ORACLE_SERVICE_NAME = os.getenv("ORACLE_SERVICE_NAME")
+ORACLE_SID = os.getenv("ORACLE_SID")
 
 # --- 知识库路径配置 ---
 # 源文档所在的文件夹
@@ -75,7 +78,7 @@ if not API_KEY or not BASE_URL:
     raise ValueError("API_KEY 或 BASE_URL 未设置，程序无法启动。")
 
 
-if not all([ORACLE_USER, ORACLE_PASSWORD, ORACLE_DSN]):
-    logger.warning("数据库配置不完整: 环境变量 ORACLE_USER, ORACLE_PASSWORD, 或 ORACLE_DSN 未全部设置。Text-to-SQL (Oracle) 功能可能无法使用。")
+if not all([ORACLE_USER, ORACLE_PASSWORD, ORACLE_HOST, ORACLE_PORT]) or not (ORACLE_SERVICE_NAME or ORACLE_SID):
+    logger.warning("数据库配置不完整: 请检查 .env 文件中的 ORACLE_USER, PASSWORD, HOST, PORT 以及 SERVICE_NAME 或 SID。")
 
 logger.info("配置加载成功，日志系统已初始化。")
