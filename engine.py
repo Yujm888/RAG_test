@@ -1,7 +1,7 @@
 #engine.py
-
 import config
 from core.search_engine import SearchEngine
+from core.query_rewriter import rewrite_query_with_history # <--- 1. 导入新函数
 import re
 
 logger = config.logger
@@ -14,7 +14,7 @@ class RAGPipeline:
 
         self.search_engine = search_engine
         self.llm_client = llm_client
-        self.MAX_CONTEXT_CHARS = 8000
+        self.MAX_CONTEXT_CHARS = config.MAX_CONTEXT_CHARS
 
         # 稳定的 RAG 系统指令
         self.SYSTEM_PROMPT = {
@@ -24,7 +24,7 @@ class RAGPipeline:
 
             # 核心规则
             1.  **绝对忠诚于上下文**: 你的回答必须完全基于【原始上下文】提供的信息。禁止进行任何形式的推理、联想或使用外部知识。
-            2.  **【重要】信息来源层级**: 
+            2.  **【重要】信息来源层级**:
                 * 【原始上下文】是回答问题的唯一合法来源。
                 * 【对话历史】仅用于理解用户问题的指代关系，绝不能作为回答问题的信息来源。
             3.  **信息不足则明确告知**: 如果【原始上下文】中的信息不足以回答【问题】，你必须明确回答：“根据我所掌握的文档资料，无法回答您的问题。”
@@ -32,23 +32,6 @@ class RAGPipeline:
             """
         }
 
-    def _rewrite_query(self, query: str, history: list) -> str:
-        if not history:
-            return query
-        logger.info(f"重写问题中")
-        messages = history[-4:]
-        messages.append({"role": "user",
-                         "content": f"请根据上述对话历史，将我下面这个可能依赖上下文的问题，改写成一个独立的、完整的、对搜索引擎友好的问题。请只返回改写后的问题本身，不要加任何多余的解释或前缀。\n\n我的问题是：'{query}'"})
-        try:
-            response = self.llm_client.chat.completions.create(
-                model="qwen-plus", messages=messages, temperature=0.0
-            )
-            rewritten_q = response.choices[0].message.content
-            logger.info(f"原始问题: '{query}' -> 重写后问题: '{rewritten_q}'")
-            return rewritten_q
-        except Exception as e:
-            logger.error(f"查询重写时出错: {e},返回原始问题")
-            return query
 
     def _prepare_context(self, retrieved_chunks: list) -> (str, list):
         if not retrieved_chunks:
@@ -75,21 +58,19 @@ class RAGPipeline:
         return context_str, sources_list
 
     def execute(self, query: str, history: list) -> dict:
-        rewritten_query = self._rewrite_query(query, history)
-        retrieved_chunks = self.search_engine.search(rewritten_query, k=5)
+        rewritten_query = rewrite_query_with_history(query, history, self.llm_client)
+        retrieved_chunks = self.search_engine.search(rewritten_query, k=config.SEARCH_TOP_K)
         context_str, sources = self._prepare_context(retrieved_chunks)
         task_prompt = f"# 原始上下文\n---\n{context_str}\n---\n\n# 问题\n{query}"
         messages_for_api = [self.SYSTEM_PROMPT] + history + [{"role": "user", "content": task_prompt}]
         try:
             logger.info("正在调用 LLM 生成最终答案...")
             response = self.llm_client.chat.completions.create(
-                model="qwen-plus", messages=messages_for_api, temperature=0.0
+                model=config.LLM_MODEL_NAME, messages=messages_for_api, temperature=0.0
             )
             pure_answer = response.choices[0].message.content
             logger.info(f"LLM 原始返回答案: {pure_answer[:100]}...")
 
-            # --- 核心修正：恢复答案清洁逻辑 ---
-            # 这行代码会移除所有 "来源：..." 或 "以上信息来源于..." 等 LLM 可能自己添加的蛇足。
             source_pattern = r'\n?(以上信息来源于文件|来源|资料来源)[：:].*'
             cleaned_answer = re.sub(source_pattern, '', pure_answer, flags=re.DOTALL).strip()
 

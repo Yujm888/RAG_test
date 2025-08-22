@@ -1,9 +1,8 @@
 # core/embedding_utils.py
 from openai import OpenAI
 import numpy as np
-import config  # 导入我们的全局配置
+import config
 
-# 从配置中获取日志记录器
 logger = config.logger
 
 try:
@@ -26,7 +25,7 @@ def get_embedding(text_chunk: str) -> np.ndarray | None:
         return None
     text_chunk = text_chunk.replace("\n", " ")
     try:
-        response = client.embeddings.create(model="text-embedding-v4", input=[text_chunk])
+        response = client.embeddings.create(model=config.EMBEDDING_MODEL_NAME, input=[text_chunk])
         return np.array(response.data[0].embedding)
     except Exception as e:
         logger.error(f"获取 embedding 时出错: {e}")

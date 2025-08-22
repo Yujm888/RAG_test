@@ -44,8 +44,8 @@ class SearchEngine:
     def _load_reranker_model(self):
         """加载重排序模型。"""
         try:
-            logger.info("正在加载重排序模型 (bge-reranker-base)...")
-            self.reranker = CrossEncoder('BAAI/bge-reranker-base', max_length=512)#加载模型
+            logger.info(f"正在加载重排序模型 ({config.RERANKER_MODEL_NAME})...")
+            self.reranker = CrossEncoder(config.RERANKER_MODEL_NAME, max_length=config.RERANKER_MAX_LENGTH)#加载模型
             logger.info("重排序模型加载成功。")
         except Exception as e:
             logger.error(f"加载重排序模型失败: {e}")

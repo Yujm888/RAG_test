@@ -1,8 +1,7 @@
 #core/text_to_sql_engine.py
-
 import config
-from core.embedding_utils import client as openai_client
 from core.schema_fetcher import BaseSchemaFetcher
+from core.query_rewriter import rewrite_query_with_history # <--- 1. 导入新函数
 
 logger = config.logger
 
@@ -33,26 +32,12 @@ class TextToSQLEngine:
             return False
         return True
 
-    def _rewrite_query_for_sql(self, query: str, history: list) -> str:
-        if not history:
-            return query
-        logger.info("为 Text-to-SQL 重写问题...")
-        messages = history[-4:]
-        messages.append({"role": "user",
-                         "content": f"请根据上述对话历史，将我下面这个可能依赖上下文的问题，改写成一个独立的、完整的、可以用于数据库查询的问题。请只返回改写后的问题本身。\n\n我的问题是：'{query}'"})
-        try:
-            response = self.llm_client.chat.completions.create(model="qwen-plus", messages=messages, temperature=0.0)
-            rewritten_q = response.choices[0].message.content
-            logger.info(f"原始SQL问题: '{query}' -> 重写后SQL问题: '{rewritten_q}'")
-            return rewritten_q
-        except Exception as e:
-            logger.error(f"为 SQL 查询重写问题时出错: {e}, 返回原始问题。")
-            return query
+    # <--- 2. 整个 _rewrite_query_for_sql 方法被删除
 
     def generate_sql(self, user_query: str, history: list = None) -> str | None:
-        standalone_query = self._rewrite_query_for_sql(user_query, history or [])
+        # <--- 3. 调用新的外部函数
+        standalone_query = rewrite_query_with_history(user_query, history or [], self.llm_client)
 
-        # --- 核心修正：恢复最有效的 Prompt ---
         prompt_template = f"""
 你是一个双重角色的 Oracle 数据库专家：一个 Schema 解答器 和一个 SQL 生成器。
 
@@ -84,7 +69,7 @@ class TextToSQLEngine:
 """
         logger.info("正在使用最终版 Prompt 调用 LLM...")
         try:
-            response = self.llm_client.chat.completions.create(model="qwen-plus",
+            response = self.llm_client.chat.completions.create(model=config.LLM_MODEL_NAME,
                                                                messages=[{"role": "user", "content": prompt_template}],
                                                                temperature=0.0)
             raw_response = response.choices[0].message.content.strip()

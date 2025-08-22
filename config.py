@@ -26,6 +26,22 @@ ORACLE_PORT = os.getenv("ORACLE_PORT")
 ORACLE_SERVICE_NAME = os.getenv("ORACLE_SERVICE_NAME")
 ORACLE_SID = os.getenv("ORACLE_SID")
 
+# --- 新增：模型与应用行为配置 ---
+# 大语言模型名称
+LLM_MODEL_NAME = "qwen-plus"
+# Embedding 模型名称
+EMBEDDING_MODEL_NAME = "text-embedding-v4"
+# Reranker 模型名称
+RERANKER_MODEL_NAME = "BAAI/bge-reranker-base"
+
+# RAG 流程参数
+# Reranker 模型能接受的最大序列长度
+RERANKER_MAX_LENGTH = 512
+# 检索阶段返回的文档块数量
+SEARCH_TOP_K = 5
+# RAG 上下文允许的最大字符数
+MAX_CONTEXT_CHARS = 8000
+
 # --- 知识库路径配置 ---
 # 源文档所在的文件夹
 SOURCE_DOCS_DIR = os.path.join(PROJECT_ROOT, "knowledge_base/source_documents")
