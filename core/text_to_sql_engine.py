@@ -1,4 +1,4 @@
-# yujm888/rag_test/RAG_test-e24255c5e1374fa6b1b3218f66279298001f055a/core/text_to_sql_engine.py
+#core/text_to_sql_engine.py
 
 import config
 from core.embedding_utils import client as openai_client
@@ -38,7 +38,6 @@ class TextToSQLEngine:
         return True
 
     def generate_sql(self, user_query: str) -> str | None:
-        # --- 核心修改：更新 Prompt 模板以使用 DDL 格式和新的指令 ---
         prompt_template = f"""
 你是一个专业的 Oracle 数据库专家。
 
@@ -88,20 +87,16 @@ class TextToSQLEngine:
 if __name__ == '__main__':
     from core.schema_fetcher import OracleSchemaFetcher
 
-    # 1. 清除缓存，强制从数据库重新拉取
     BaseSchemaFetcher.clear_cache()
 
     try:
-        # 2. 初始化 Oracle 提取器
         oracle_fetcher = OracleSchemaFetcher()
 
-        # 3. 初始化 Text-to-SQL 引擎
         text_to_sql_engine = TextToSQLEngine(
             schema_fetcher=oracle_fetcher,
             llm_client=openai_client
         )
 
-        # 4. 执行测试
         test_query = "有哪些监管文件表？"
         print(f"\n--- 正在测试 TextToSQLEngine (Oracle & DDL) ---")
         print(f"用户问题: {test_query}\n")

@@ -1,4 +1,4 @@
-# yujm888/rag_test/RAG_test-e24255c5e1374fa6b1b3218f66279298001f055a/core/schema_fetcher.py
+#core/schema_fetcher.py
 
 import os
 import oracledb

@@ -4,10 +4,7 @@ import os
 import logging
 from dotenv import load_dotenv
 
-# --- 核心修正：构建到项目根目录的绝对路径 ---
-# 首先，我们确定项目的根目录
-# __file__ 是当前文件 (config.py) 的路径
-# os.path.dirname(__file__) 就是 config.py 所在的目录，也就是项目根目录
+# --- 构建到项目根目录的绝对路径 ---
 PROJECT_ROOT = os.path.dirname(__file__)
 
 # --- 1. 加载 .env 文件中的环境变量 ---
