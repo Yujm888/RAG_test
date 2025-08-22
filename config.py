@@ -21,6 +21,11 @@ load_dotenv(dotenv_path=dotenv_path)
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv("BASE_URL")
 
+# --- Oracle DB 配置 ---
+ORACLE_USER = os.getenv("ORACLE_USER")
+ORACLE_PASSWORD = os.getenv("ORACLE_PASSWORD")
+ORACLE_DSN = os.getenv("ORACLE_DSN")
+
 # --- 知识库路径配置 ---
 # 源文档所在的文件夹
 SOURCE_DOCS_DIR = os.path.join(PROJECT_ROOT, "knowledge_base/source_documents")
@@ -41,7 +46,7 @@ CHUNKS_FILE_PATH = os.path.join(GENERATED_DATA_DIR, KB_CHUNKS_FILE)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# --- 核心修正：使用绝对路径来指定日志文件 ---
+# --- 使用绝对路径来指定日志文件 ---
 LOG_FILE_PATH = os.path.join(PROJECT_ROOT, 'app.log')
 file_handler = logging.FileHandler(LOG_FILE_PATH, mode='a', encoding='utf-8')
 file_handler.setLevel(logging.INFO)
@@ -71,5 +76,9 @@ logger.addHandler(stream_handler)
 if not API_KEY or not BASE_URL:
     logger.error("关键配置缺失: 环境变量 API_KEY 或 BASE_URL 未设置。请检查 .env 文件。")
     raise ValueError("API_KEY 或 BASE_URL 未设置，程序无法启动。")
+
+
+if not all([ORACLE_USER, ORACLE_PASSWORD, ORACLE_DSN]):
+    logger.warning("数据库配置不完整: 环境变量 ORACLE_USER, ORACLE_PASSWORD, 或 ORACLE_DSN 未全部设置。Text-to-SQL (Oracle) 功能可能无法使用。")
 
 logger.info("配置加载成功，日志系统已初始化。")
