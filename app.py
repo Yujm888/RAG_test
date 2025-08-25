@@ -175,7 +175,16 @@ if __name__ == '__main__':
         logger.error("错误：核心引擎未能成功加载。Flask 应用无法启动。")
     else:
         logger.info("Flask 应用准备启动...")
+        base_url = "http://127.0.0.1:5000"
         print("=" * 80)
-        print(">>> 应用已启动！请在浏览器中访问 http://127.0.0.1:5000 <<<")
+        print(">>> 应用已启动！请在浏览器或API工具中访问以下地址：")
+        print("-" * 80)
+        print(f"  - Web UI (主页):     {base_url}/")
+        print(f"  - Web UI (RAG):      {base_url}/rag")
+        print(f"  - Web UI (SQL):      {base_url}/text_to_sql")
+        print("-" * 80)
+        print("  --- API Endpoints (POST, a JSON) ---")
+        print(f"  - RAG API:           {base_url}/api/rag/ask")
+        print(f"  - Text-to-SQL API:   {base_url}/api/sql/ask")
         print("=" * 80)
         app.run(debug=False, host='0.0.0.0', port=5000)
