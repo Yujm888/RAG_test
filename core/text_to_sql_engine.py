@@ -30,12 +30,14 @@ class TextToSQLEngine:
             text = text.replace(full, half)
         return text
 
+
     def _validate_sql(self, sql: str) -> bool:
         forbidden = ['INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'TRUNCATE', 'GRANT', 'REVOKE']
         if any(key in sql.upper() for key in forbidden) or not sql.strip().upper().startswith('SELECT'):
             logger.warning(f"SQL 校验失败: '{sql}'")
             return False
         return True
+
 
     def _generate_initial_sql(self, standalone_query: str) -> str | None:
         """只负责根据问题生成初版SQL或答案"""
@@ -78,6 +80,7 @@ class TextToSQLEngine:
             logger.error(f"生成初版 SQL 时调用 LLM 出错: {e}")
             return None
 
+
     def _fix_sql_with_error(self, standalone_query: str, wrong_sql: str, error_message: str) -> str | None:
         """根据错误信息修正SQL"""
         prompt_template = f"""
@@ -115,6 +118,7 @@ class TextToSQLEngine:
             logger.error(f"修正 SQL 时调用 LLM 出错: {e}")
             return None
 
+
     def _execute_sql(self, sql: str) -> dict:
         """执行SQL并返回结果。"""
         if not self.db_engine:
@@ -133,6 +137,7 @@ class TextToSQLEngine:
         except Exception as e:
             logger.error(f"执行 SQL 时出错: {e}")
             raise e
+
 
     def run_text_to_sql_flow(self, user_query: str, history: list = None) -> dict:
         """

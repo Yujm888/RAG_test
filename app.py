@@ -37,9 +37,8 @@ try:
     db_engine = create_engine(db_uri)
     logger.info("全局数据库引擎实例创建成功。")
 
-    # Text-to-SQL Engine (现在需要传入 db_engine)
+    # Text-to-SQL Engine
     oracle_fetcher = OracleSchemaFetcher()
-    # 注意这里的变化：在初始化时传入了 db_engine
     text_to_sql_engine = TextToSQLEngine(schema_fetcher=oracle_fetcher, llm_client=openai_client, db_engine=db_engine)
     logger.info("Text-to-SQL 引擎实例创建成功。")
 
@@ -48,7 +47,6 @@ except Exception as e:
 
 
 # --- 渲染页面的路由 ---
-
 @app.route('/')
 def index():
     return render_template('index.html')
